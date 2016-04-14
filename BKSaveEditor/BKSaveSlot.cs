@@ -19,6 +19,19 @@ namespace BKSaveEditor {
 
 		public const int CHECKSUM_OFFSET = 0x74;
 
+		public const UInt64 fullNotes = 0x7FFFFFFFFFFFFFFF;
+		public static UInt64[] noteScoreBitmasks = new UInt64[] {
+			0x7F00000000000000, // MM
+			0x00FE000000000000, // TTC
+			0x0001FC0000000000, // CC
+			0x000003F800000000, // BGS
+			0x00000007F0000000, // FP
+			0x000000000FE00000, // GV
+			0x00000000001FC000, // CCW
+			0x0000000000003F80, // RBB
+			0x000000000000007F  // MMM
+		};
+
 		public byte[] SlotData;
 		public int physicalIndex;
 
@@ -26,6 +39,11 @@ namespace BKSaveEditor {
 			SlotData = new Byte[SLOT_SIZE];
 			physicalIndex = _physicalIndex;
 			Buffer.BlockCopy(EEPROM, SLOT_SIZE * physicalIndex, SlotData, 0x00, SLOT_SIZE);
+		}
+
+		public BKSaveSlot(BKSaveSlot other) {
+			this.physicalIndex = other.physicalIndex;
+			this.SlotData = other.SlotData;
 		}
 
 		#region Low Level methods
@@ -94,19 +112,6 @@ namespace BKSaveEditor {
 			}
 		}
 
-		public UInt64 fullNotes = 0x7FFFFFFFFFFFFFFF;
-		public UInt64[] noteScoreBitmasks = new UInt64[] {
-			0x7F00000000000000, // MM
-			0x00FE000000000000, // TTC
-			0x0001FC0000000000, // CC
-			0x000003F800000000, // BGS
-			0x00000007F0000000, // FP
-			0x000000000FE00000, // GV
-			0x00000000001FC000, // CCW
-			0x0000000000003F80, // RBB
-			0x000000000000007F  // MMM
-		};
-
 		public int getNoteScore(int level) {
 			if (level < noteScoreBitmasks.Length) {
 				UInt64 noteScores = getUInt64(NOTE_SCORE_BASE_OFFSET);
@@ -148,6 +153,17 @@ namespace BKSaveEditor {
 
 		public void setMoves(UInt32 bitfield) {
 			setData(MOVES_BITFIELD, bitfield);
+		}
+
+		// Sets the index of the file on the file select screen
+		public void setFileSelectIndex(byte index) {
+			SlotData[0] = 0x11; // Mark the file as active
+			SlotData[1] = index; // Set which slot it will appear in
+		}
+
+		// Gets the index of the file on the file select screen
+		public byte getFileSelectIndex() {
+			return SlotData[0];
 		}
 	}
 }

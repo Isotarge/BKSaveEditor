@@ -29,7 +29,6 @@ namespace BKSaveEditor {
 		public CheckBox[] MovesCheckboxes;
 		public TextBox[] NoteScoreTextboxes;
 		public RadioButton[] RadioSlots;
-		
 
 		public frmMainForm() {
 			InitializeComponent();
@@ -144,6 +143,50 @@ namespace BKSaveEditor {
 			};
 		}
 
+		public void refreshUI() {
+			updateChecksumTextbox();
+			updateGameTimeTextboxes();
+			updateHoneycombCheckboxes();
+			updateMovesCheckboxes();
+			updateNoteScoreTextboxes();
+			txtMumboTokensOnHand.Text = Slots[SelectedSlot].getMumboTokensOnHand().ToString();
+			txtJiggiesOnHand.Text = Slots[SelectedSlot].getJiggiesOnHand().ToString();
+		}
+
+		private void refreshRadioButtons() {
+			SelectedSlot = -1;
+			for (int i = RadioSlots.Length - 1; i >= 0; i--) {
+				RadioSlots[i].Enabled = false;
+				if (Slots[i] != null) {
+					RadioSlots[i].Enabled = true;
+					RadioSlots[i].Checked = true;
+					SelectedSlot = i;
+				}
+			}
+
+			if (SelectedSlot != -1) {
+				tabControl1.Enabled = true;
+				txtEEPName.Text = openEEPFileDialog.FileName;
+				btnMoveCopy.Enabled = true;
+				btnSaveEEP.Enabled = true;
+				this.AcceptButton = btnSaveEEP;
+				refreshUI();
+			} else {
+				tabControl1.Enabled = false;
+				btnSaveEEP.Enabled = false;
+				FileLoaded = false;
+			}
+		}
+
+		private void radioSlotChange(object sender, EventArgs e) {
+			for (int i = 0; i < RadioSlots.Length; i++) {
+				if (RadioSlots[i].Checked) {
+					SelectedSlot = i;
+				}
+			}
+			refreshUI();
+		}
+
 		private void txtEEPName_click(object sender, EventArgs e) {
 			// Byte array to load the EEPROM data
 			byte[] EEPROM = new byte[EEPROM_SIZE];
@@ -172,49 +215,8 @@ namespace BKSaveEditor {
 					}
 				}
 
-				SelectedSlot = -1;
-				for (int i = RadioSlots.Length - 1; i >= 0; i--) {
-					RadioSlots[i].Enabled = false;
-					if (Slots[i] != null) {
-						RadioSlots[i].Enabled = true;
-						RadioSlots[i].Checked = true;
-						SelectedSlot = i;
-					}
-				}
-
-				if (SelectedSlot != -1) {
-					tabControl1.Enabled = true;
-					txtEEPName.Text = openEEPFileDialog.FileName;
-					btnSaveEEP.Enabled = true;
-					this.AcceptButton = btnSaveEEP;
-					refreshUI();
-				} else {
-					tabControl1.Enabled = false;
-					btnSaveEEP.Enabled = false;
-					FileLoaded = false;
-				}
+				refreshRadioButtons();
 			}
-		}
-
-		public void refreshUI() {
-			updateChecksumTextbox();
-			updateGameTimeTextboxes();
-			updateHoneycombCheckboxes();
-			updateMovesCheckboxes();
-			updateNoteScoreTextboxes();
-			txtMumboTokensOnHand.Text = Slots[SelectedSlot].getMumboTokensOnHand().ToString();
-			txtJiggiesOnHand.Text = Slots[SelectedSlot].getJiggiesOnHand().ToString();
-		}
-
-		private void radioSlotChange(object sender, EventArgs e) {
-			if (radioSlot1.Checked) {
-				SelectedSlot = 0;
-			} else if (radioSlot2.Checked) {
-				SelectedSlot = 1;
-			} else if (radioSlot3.Checked) {
-				SelectedSlot = 2;
-			}
-			refreshUI();
 		}
 
 		public void updateGameTimeTextboxes() {
@@ -376,6 +378,23 @@ namespace BKSaveEditor {
 				EEPFile.Seek(0, SeekOrigin.Begin);
 				refreshUI();
 			}
+		}
+
+		public int getLowestUnusedPhysicalIndex() {
+			int lowestUnused = 4;
+			for (int i = 0; i < Slots.Length; i++) {
+				if (Slots[i] != null) {
+					lowestUnused = Math.Min(lowestUnused, Slots[i].physicalIndex);
+				}
+			}
+			return lowestUnused;
+		}
+
+		private void btnMoveCopy_click(object sender, EventArgs e) {
+			MoveCopyFileForm moverAndShaker = new MoveCopyFileForm();
+			moverAndShaker.parentForm = this;
+			moverAndShaker.ShowDialog();
+			refreshRadioButtons();
 		}
 	}
 }

@@ -26,6 +26,7 @@
 			this.btnSaveEEP = new System.Windows.Forms.Button();
 			this.txtEEPName = new System.Windows.Forms.TextBox();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.btnMoveCopy = new System.Windows.Forms.Button();
 			this.radioSlot3 = new System.Windows.Forms.RadioButton();
 			this.radioSlot2 = new System.Windows.Forms.RadioButton();
 			this.radioSlot1 = new System.Windows.Forms.RadioButton();
@@ -34,6 +35,9 @@
 			this.txtChecksum = new System.Windows.Forms.TextBox();
 			this.tabControl1 = new System.Windows.Forms.TabControl();
 			this.tabPage1 = new System.Windows.Forms.TabPage();
+			this.btnApplyGameTime = new System.Windows.Forms.Button();
+			this.txtGameTimeTotal = new System.Windows.Forms.TextBox();
+			this.label24 = new System.Windows.Forms.Label();
 			this.label11 = new System.Windows.Forms.Label();
 			this.label10 = new System.Windows.Forms.Label();
 			this.label9 = new System.Windows.Forms.Label();
@@ -167,9 +171,6 @@
 			this.chkHSM2 = new System.Windows.Forms.CheckBox();
 			this.chkHSM1 = new System.Windows.Forms.CheckBox();
 			this.txtComputedChecksum = new System.Windows.Forms.TextBox();
-			this.label24 = new System.Windows.Forms.Label();
-			this.txtGameTimeTotal = new System.Windows.Forms.TextBox();
-			this.btnApplyGameTime = new System.Windows.Forms.Button();
 			this.groupBox1.SuspendLayout();
 			this.tabControl1.SuspendLayout();
 			this.tabPage1.SuspendLayout();
@@ -218,6 +219,7 @@
 			// groupBox1
 			// 
 			this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox1.Controls.Add(this.btnMoveCopy);
 			this.groupBox1.Controls.Add(this.radioSlot3);
 			this.groupBox1.Controls.Add(this.radioSlot2);
 			this.groupBox1.Controls.Add(this.radioSlot1);
@@ -228,16 +230,28 @@
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Save Slot";
 			// 
+			// btnMoveCopy
+			// 
+			this.btnMoveCopy.Enabled = false;
+			this.btnMoveCopy.Location = new System.Drawing.Point(64, 16);
+			this.btnMoveCopy.Name = "btnMoveCopy";
+			this.btnMoveCopy.Size = new System.Drawing.Size(86, 23);
+			this.btnMoveCopy.TabIndex = 33;
+			this.btnMoveCopy.Text = "Move / Copy";
+			this.btnMoveCopy.UseVisualStyleBackColor = true;
+			this.btnMoveCopy.Click += new System.EventHandler(this.btnMoveCopy_click);
+			// 
 			// radioSlot3
 			// 
 			this.radioSlot3.AutoSize = true;
 			this.radioSlot3.Enabled = false;
 			this.radioSlot3.Location = new System.Drawing.Point(6, 65);
 			this.radioSlot3.Name = "radioSlot3";
-			this.radioSlot3.Size = new System.Drawing.Size(52, 17);
+			this.radioSlot3.Size = new System.Drawing.Size(61, 17);
 			this.radioSlot3.TabIndex = 31;
-			this.radioSlot3.Text = "Slot 3";
+			this.radioSlot3.Text = "Kitchen";
 			this.radioSlot3.UseVisualStyleBackColor = true;
+			this.radioSlot3.CheckedChanged += new System.EventHandler(this.radioSlotChange);
 			// 
 			// radioSlot2
 			// 
@@ -245,10 +259,11 @@
 			this.radioSlot2.Enabled = false;
 			this.radioSlot2.Location = new System.Drawing.Point(6, 42);
 			this.radioSlot2.Name = "radioSlot2";
-			this.radioSlot2.Size = new System.Drawing.Size(52, 17);
+			this.radioSlot2.Size = new System.Drawing.Size(70, 17);
 			this.radioSlot2.TabIndex = 30;
-			this.radioSlot2.Text = "Slot 2";
+			this.radioSlot2.Text = "Gameboy";
 			this.radioSlot2.UseVisualStyleBackColor = true;
+			this.radioSlot2.CheckedChanged += new System.EventHandler(this.radioSlotChange);
 			// 
 			// radioSlot1
 			// 
@@ -257,10 +272,10 @@
 			this.radioSlot1.Enabled = false;
 			this.radioSlot1.Location = new System.Drawing.Point(6, 19);
 			this.radioSlot1.Name = "radioSlot1";
-			this.radioSlot1.Size = new System.Drawing.Size(52, 17);
+			this.radioSlot1.Size = new System.Drawing.Size(44, 17);
 			this.radioSlot1.TabIndex = 29;
 			this.radioSlot1.TabStop = true;
-			this.radioSlot1.Text = "Slot 1";
+			this.radioSlot1.Text = "Bed";
 			this.radioSlot1.UseVisualStyleBackColor = true;
 			this.radioSlot1.CheckedChanged += new System.EventHandler(this.radioSlotChange);
 			// 
@@ -347,6 +362,33 @@
 			this.tabPage1.Size = new System.Drawing.Size(430, 283);
 			this.tabPage1.TabIndex = 0;
 			this.tabPage1.Text = "Game Time";
+			// 
+			// btnApplyGameTime
+			// 
+			this.btnApplyGameTime.Location = new System.Drawing.Point(319, 254);
+			this.btnApplyGameTime.Name = "btnApplyGameTime";
+			this.btnApplyGameTime.Size = new System.Drawing.Size(100, 23);
+			this.btnApplyGameTime.TabIndex = 49;
+			this.btnApplyGameTime.Text = "Apply";
+			this.btnApplyGameTime.UseVisualStyleBackColor = true;
+			this.btnApplyGameTime.Click += new System.EventHandler(this.btnApplyGameTime_Click);
+			// 
+			// txtGameTimeTotal
+			// 
+			this.txtGameTimeTotal.Location = new System.Drawing.Point(297, 136);
+			this.txtGameTimeTotal.Name = "txtGameTimeTotal";
+			this.txtGameTimeTotal.ReadOnly = true;
+			this.txtGameTimeTotal.Size = new System.Drawing.Size(100, 20);
+			this.txtGameTimeTotal.TabIndex = 48;
+			// 
+			// label24
+			// 
+			this.label24.AutoSize = true;
+			this.label24.Location = new System.Drawing.Point(201, 139);
+			this.label24.Name = "label24";
+			this.label24.Size = new System.Drawing.Size(31, 13);
+			this.label24.TabIndex = 47;
+			this.label24.Text = "Total";
 			// 
 			// label11
 			// 
@@ -1679,33 +1721,6 @@
 			this.txtComputedChecksum.Size = new System.Drawing.Size(100, 20);
 			this.txtComputedChecksum.TabIndex = 46;
 			// 
-			// label24
-			// 
-			this.label24.AutoSize = true;
-			this.label24.Location = new System.Drawing.Point(201, 139);
-			this.label24.Name = "label24";
-			this.label24.Size = new System.Drawing.Size(31, 13);
-			this.label24.TabIndex = 47;
-			this.label24.Text = "Total";
-			// 
-			// txtGameTimeTotal
-			// 
-			this.txtGameTimeTotal.Location = new System.Drawing.Point(297, 136);
-			this.txtGameTimeTotal.Name = "txtGameTimeTotal";
-			this.txtGameTimeTotal.ReadOnly = true;
-			this.txtGameTimeTotal.Size = new System.Drawing.Size(100, 20);
-			this.txtGameTimeTotal.TabIndex = 48;
-			// 
-			// btnApplyGameTime
-			// 
-			this.btnApplyGameTime.Location = new System.Drawing.Point(319, 254);
-			this.btnApplyGameTime.Name = "btnApplyGameTime";
-			this.btnApplyGameTime.Size = new System.Drawing.Size(100, 23);
-			this.btnApplyGameTime.TabIndex = 49;
-			this.btnApplyGameTime.Text = "Apply";
-			this.btnApplyGameTime.UseVisualStyleBackColor = true;
-			this.btnApplyGameTime.Click += new System.EventHandler(this.btnApplyGameTime_Click);
-			// 
 			// frmMainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1909,6 +1924,7 @@
 		private System.Windows.Forms.TextBox txtGameTimeTotal;
 		private System.Windows.Forms.Label label24;
 		private System.Windows.Forms.Button btnApplyGameTime;
+		private System.Windows.Forms.Button btnMoveCopy;
 	}
 }
 
